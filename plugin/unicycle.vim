@@ -38,6 +38,11 @@
 " If you set cmdheight=2 or greater, you'll see some handy messages indicating
 " what special character was last inserted into the buffer.
 
+if exists("g:loaded_unicycle")
+    finish
+endif
+let g:loaded_unicycle = 1
+
 function! UniCycleGetUTF8Char(src, start)
 	let nr = char2nr(strpart(a:src, a:start, 1))
 	if nr < 128
