@@ -194,7 +194,7 @@ if g:unicycle_on
     call unicycle#activate()
 endif
 
-function! UniCycleToggle()
+function! unicycle#toggle()
     if g:unicycle_on
         echo "Turning unicycle off"
         let g:unicycle_on = 0
@@ -205,4 +205,5 @@ function! UniCycleToggle()
         call unicycle#activate()
     endif
 endfunction
-command UniCycleToggle call UniCycleToggle()
+
+command UniCycleToggle call unicycle#toggle()
