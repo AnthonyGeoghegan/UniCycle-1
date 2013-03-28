@@ -51,7 +51,7 @@ if exists("g:loaded_unicycle")
 endif
 let g:loaded_unicycle = 1
 
-function! UniCycleGetUTF8Char(src, start)
+function! s:UniCycleGetUTF8Char(src, start)
 	let nr = char2nr(strpart(a:src, a:start, 1))
 	if nr < 128
 		let len = 1
@@ -72,7 +72,7 @@ function! UniCycleGetUTF8Char(src, start)
 	return strpart(a:src, a:start, len)
 endfunction
 
-function! UniCycleHyphen()
+function! s:UniCycleHyphen()
 	if col(".") == 1
 		echo "HYPHEN-MINUS"
 	else
@@ -94,7 +94,7 @@ function! UniCycleHyphen()
 	endif
 endfunction
 
-function! UniCyclePeriod()
+function! s:UniCyclePeriod()
 	if col(".") < 3
 		echo "FULL STOP"
 	else
@@ -117,7 +117,7 @@ function! UniCyclePeriod()
 	endif
 endfunction
 
-function! UniCycleApostrophe()
+function! s:UniCycleApostrophe()
 	if col(".") == 1
 		execute "normal r\u2018"
 		echo "LEFT SINGLE QUOTATION MARK"
@@ -143,7 +143,7 @@ function! UniCycleApostrophe()
 	endif
 endfunction
 
-function! UniCycleQuote()
+function! s:UniCycleQuote()
 	if col(".") == 1
 		execute "normal r\u201C"
 		echo "LEFT DOUBLE QUOTATION MARK"
@@ -169,41 +169,33 @@ function! UniCycleQuote()
 	endif
 endfunction
 
-function! unicycle#activate()
-	inoremap - -<Esc>:call UniCycleHyphen()<CR>a
-	inoremap . .<Esc>:call UniCyclePeriod()<CR>a
-	inoremap ' x<Esc>:call UniCycleApostrophe()<CR>a
-	inoremap " x<Esc>:call UniCycleQuote()<CR>a
+function! s:UniCycleActivate()
+    let b:unicycle_on = 1
+	inoremap <buffer> - -<Esc>:call UniCycleHyphen()<CR>a
+	inoremap <buffer> . .<Esc>:call UniCyclePeriod()<CR>a
+	inoremap <buffer> ' x<Esc>:call UniCycleApostrophe()<CR>a
+	inoremap <buffer> " x<Esc>:call UniCycleQuote()<CR>a
 endfunction
 
-function! unicycle#deactivate()
-	iunmap -
-	iunmap .
-	iunmap '
-	iunmap "
+function! s:UniCycleDeactivate()
+    let b:unicycle_on = 0
+	iunmap <buffer> -
+	iunmap <buffer> .
+	iunmap <buffer> '
+	iunmap <buffer> "
 endfunction
 
-command UniCycleOn call unicycle#activate()
-command UniCycleOff call unicycle#deactivate()
-
-if !exists('g:unicycle_on')
-    " Users should turn on manually from elsewhere.
-    let g:unicycle_on = 0
-endif
-if g:unicycle_on
-    call unicycle#activate()
-endif
-
-function! unicycle#toggle()
-    if g:unicycle_on
-        echo "Turning unicycle off"
-        let g:unicycle_on = 0
-        call unicycle#deactivate()
+function! s:UniCycleToggleActive()
+    if !exists(b:unicycle_on)
+        let b:unicycle_on = 0
+    endif
+    if b:unicycle_on
+        UniCycleOff
     else
-        echo "Turning unicycle on"
-        let g:unicycle_on = 1
-        call unicycle#activate()
+        UniCycleOn
     endif
 endfunction
 
-command UniCycleToggle call unicycle#toggle()
+command UniCycleOn call UniCycleActivate()
+command UniCycleOff call UniCycleDeactivate()
+command UniCycleToggle call UniCycleToggleActive()
