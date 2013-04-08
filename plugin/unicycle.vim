@@ -77,7 +77,7 @@ function! s:UniCycleHyphen()
 		echo "HYPHEN-MINUS"
 	else
 		normal h
-		let prev_char = UniCycleGetUTF8Char(getline("."), col(".") - 1)
+		let prev_char = s:UniCycleGetUTF8Char(getline("."), col(".") - 1)
 		if prev_char == "-"
 			execute "normal xr\u2013"
 			echo "EN DASH"
@@ -99,10 +99,10 @@ function! s:UniCyclePeriod()
 		echo "FULL STOP"
 	else
 		normal h
-		let prev1 = UniCycleGetUTF8Char(getline("."), col(".") - 1)
+		let prev1 = s:UniCycleGetUTF8Char(getline("."), col(".") - 1)
 		if prev1 == "."
 			normal h
-			let prev2 = UniCycleGetUTF8Char(getline("."), col(".") - 1)
+			let prev2 = s:UniCycleGetUTF8Char(getline("."), col(".") - 1)
 			if prev2 == "."
 				execute "normal xxr\u2026"
 				echo "HORIZONTAL ELLIPSIS"
@@ -123,7 +123,7 @@ function! s:UniCycleApostrophe()
 		echo "LEFT SINGLE QUOTATION MARK"
 	else
 		normal h
-		let prev_char = UniCycleGetUTF8Char(getline("."), col(".") - 1)
+		let prev_char = s:UniCycleGetUTF8Char(getline("."), col(".") - 1)
 		if stridx(" <>()[]{}", prev_char) != -1
 			execute "normal lr\u2018"
 			echo "LEFT SINGLE QUOTATION MARK"
@@ -149,7 +149,7 @@ function! s:UniCycleQuote()
 		echo "LEFT DOUBLE QUOTATION MARK"
 	else
 		normal h
-		let prev_char = UniCycleGetUTF8Char(getline("."), col(".") - 1)
+		let prev_char = s:UniCycleGetUTF8Char(getline("."), col(".") - 1)
 		if stridx(" <>()[]{}", prev_char) != -1
 			execute "normal lr\u201C"
 			echo "LEFT DOUBLE QUOTATION MARK"
@@ -171,10 +171,10 @@ endfunction
 
 function! s:UniCycleActivate()
     let b:unicycle_on = 1
-	inoremap <buffer> - -<Esc>:call UniCycleHyphen()<CR>a
-	inoremap <buffer> . .<Esc>:call UniCyclePeriod()<CR>a
-	inoremap <buffer> ' x<Esc>:call UniCycleApostrophe()<CR>a
-	inoremap <buffer> " x<Esc>:call UniCycleQuote()<CR>a
+	inoremap <buffer> - -<Esc>:call <SID>UniCycleHyphen()<CR>a
+	inoremap <buffer> . .<Esc>:call <SID>UniCyclePeriod()<CR>a
+	inoremap <buffer> ' x<Esc>:call <SID>UniCycleApostrophe()<CR>a
+	inoremap <buffer> " x<Esc>:call <SID>UniCycleQuote()<CR>a
 endfunction
 
 function! s:UniCycleDeactivate()
@@ -186,16 +186,18 @@ function! s:UniCycleDeactivate()
 endfunction
 
 function! s:UniCycleToggleActive()
-    if !exists(b:unicycle_on)
+    if !exists("b:unicycle_on")
         let b:unicycle_on = 0
     endif
     if b:unicycle_on
-        UniCycleOff
+        call s:UniCycleDeactivate()
+        echo "UniCycle deactivated"
     else
-        UniCycleOn
+        call s:UniCycleActivate()
+        echo "UniCycle activated"
     endif
 endfunction
 
-command UniCycleOn call UniCycleActivate()
-command UniCycleOff call UniCycleDeactivate()
-command UniCycleToggle call UniCycleToggleActive()
+command UniCycleOn call <SID>UniCycleActivate()
+command UniCycleOff call <SID>UniCycleDeactivate()
+command UniCycleToggle call <SID>UniCycleToggleActive()
