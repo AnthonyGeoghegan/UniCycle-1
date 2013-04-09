@@ -1,6 +1,8 @@
 " UniCycle, Release 1, 2005-10-20
 "
-" by Jason Diamond <http://jason.diamond.name/>
+" Original Author: Jason Diamond <http://jason.diamond.name/>
+" Contributors: Micah Elliot <http://github.com/MicahElliott>
+"               Joseph Irwin <http://github.com/cordarei/>
 "
 " This document has been placed in the public domain.
 "
@@ -8,15 +10,17 @@
 " works if set encoding=utf-8.
 "
 " To install, drop it in your plugins directory. To use, execute the
-" :UniCycleOn command. Turn turn it off, execute :UniCycleOff.
+" :UniCycleOn command. Turn turn it off, execute :UniCycleOff. UniCycle is
+" buffer-local, so that activating it in one buffer will not affect maps in
+" any other buffers that might be open.
 "
-" You can also toggle this on/off by using the :UniCycleToggle command.
-" For convenience, you might put this in your ‘~/.vimrc’ with a line
-" something like:
-"   map <Leader>u :UniCycleToggle<CR>
-" and then toggle it on/off repeatedly with ‘\u’. To start with unicycle
-" on you can also include:
-"   let g:unicycle_on = 1  # or equivalently: call unicycle#activate()
+" You can also toggle this on/off by using the :UniCycleToggle command.  For
+" convenience, you might put this in your ‘~/.vimrc’ with a line something
+" like: map <Leader>u :UniCycleToggle<CR> and then toggle it on/off repeatedly
+" with ‘\u’. It is safe to execute :UniCycleToggle without :UniCycleOn.
+"
+" To start with UniCycle on you can execute :UniCycleOn in your .vimrc or use
+" an autocommand to activate UniCycle for certain filetypes.
 "
 " When on, the hyphen (-), period (.), apostrophe ('), and quote (")
 " characters are mapped to the appropriate functions within this file.
